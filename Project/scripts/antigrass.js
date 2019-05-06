@@ -1,4 +1,11 @@
-class antiGrass extends LivingCreature {
+class antiGrass extends LivingCreature{
+
+	constructor(x, y, index){
+        super(x, y, index);
+        this.energy = 3;
+    }
+
+
 
 	mul(){
 		if(this.energy == 6){
@@ -20,7 +27,6 @@ class antiGrass extends LivingCreature {
 			this.energy = 0;
 		}
 	}	
-	
 
 	eat(){
 		this.multiply++;
@@ -52,6 +58,12 @@ class antiGrass extends LivingCreature {
 				
 				
 		}
-	
+
+		}
+
+	}
+
 
 }
+
+

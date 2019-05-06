@@ -2,7 +2,9 @@ class LivingCreature {
     constructor(x, y, index){
         this.x = x;
         this.y = y;
-        this.multiply = 0;
+		this.multiply = 0;
+		this.energy = 0;
+		this.xp = 6;
         this.index = index;
         this.directions = [
             [this.x - 1, this.y - 1],

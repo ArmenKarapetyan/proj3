@@ -10,7 +10,7 @@ for (var k = 0; k < y; k++){
         }
      }
 
-var xotCount = x*y*30/70;
+var xotCount = x*y*70/70;
 
 for(var i = 0; i < xotCount; i++){
     var xx = Math.floor(Math.random()*x);
@@ -30,7 +30,7 @@ for(var i = 0; i < xotCount; i++){
 }
 console.log(matrix);
 
-var side = 35;
+var side = 25;
 var xotArr = [];
 var antixot = [];
 var antiantixot = [];
