@@ -77,11 +77,11 @@ function draw() {
 
   for(var i in antixot){
     antixot[i].eat();
-
+    antixot[i].mul();
   }
 
   for(var i in antixot){
-    antixot[i].mul();
+    
 
   }
 
