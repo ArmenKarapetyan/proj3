@@ -1,4 +1,4 @@
- var matrix = [];
+
 var x = 27;
 var y = 27;
 
@@ -31,10 +31,6 @@ for(var i = 0; i < xotCount; i++){
 console.log(matrix);
 
 var side = 25;
-var xotArr = [];
-var antixot = [];
-var antiantixot = [];
-var bombs = [];
 
 function setup() {
     frameRate(2);
