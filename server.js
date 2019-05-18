@@ -2,109 +2,119 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-var fs = require('fs');
-
 
 app.use(express.static("."));
+
 app.get('/', function (req, res) {
-   res.redirect('index.html');
+    res.redirect('index.html');
+});
+server.listen(3000, function () {
+    console.log("port is runninng")
+
 });
 
-server.listen(3000);
-
-
+//stex kapum en mer classery
 var Grass = require("./module/grass.js");
-var Antigrass = require("./module/Antigrass.js");
-var Antiantigrass = require("./module/Antiantigrass.js");
-var bombes = require("./module/bombes.js");
+var GrassEater = require("./module/grassEater.js");
+var Predator = require("./module/predator.js");
+var Bombes = require("./module/bombes.js");
 
 
+//haytarum en zanvacnery
+grassArr = [];
+grasseaterArr = [];
+predatorArr = [];
+bombesArr = [];
 
-xotArr = [];
-antixot = [];
-antiantixot = [];
-bombs = [];
+//stexcum en matrix generacnox function
+var w = 50;
+var h = 60;
 
-
-let matrix = []; // Մատրիցի ստեղծում
-let rows = 100; // Տողերի քանակ
-let columns = 100; // Սյուների քանակ
-
-for (let y = 0; y < rows; y++) {
-matrix[y] = []; // Մատրիցի նոր տողի ստեղծում
-    for (let x = 0; x < columns; x++) {
-        let a = Math.floor(Math.random() * 100);
-            if (a >= 0 && a < 20) {
-            matrix[y][x] = 0; // Մատրիցի 20 տոկոսը կլինի 0
-            }
-                if (a >= 20 && a < 40) {
-                matrix[y][x] = 1; // Մատրիցի 20 տոկոսը կլինի 1
-                }
-                        else if (a >= 40 && a < 50) {
-                        matrix[y][x] = 2; // Մատրիցի 10 տոկոսը կլինի 2
-                        }
-                            else if (a >= 50 && a < 70) {
-                            matrix[y][x] = 3; // Մատրիցի 20 տոկոսը կլինի 3
-                            }
-                                else if (a >= 70 && a < 90) {
-                                matrix[y][x] = 4; // Մատրիցի 20 տոկոսը կլինի 4
-                                }
-                                    else if (a >= 90 && a < 100) {
-                                    matrix[y][x] = 5; // Մատրիցի 10 տոկոսը կլինի 5
-                                    }
-}
-return matrix
-}
-
-Random = function(arr){
-    return arr[Math.floor(Math.random() = arr.length)];
-}
-matrix = genMatrix(rows, columns);
-
-
-for(var y = 0; y < matrix.length; y++){
-    for(var x = 0; x < matrix[y].length; x++){
-        if (matrix[y][x] == 1){
-            xotArr.push(new Grass(x, y, 1));
+function genMatrix(w, h) {
+    var matrix = [];
+    for (var y = 0; y < h; y++) {
+        matrix[y] = [];
+        for (var x = 0; x < w; x++) {
+            var r = Math.floor(Math.random() * 75);
+            if (r < 20) r = 0;
+            else if (r < 30) r = 1;
+            else if (r < 55) r = 2;
+            else if (r < 75) r = 3;
+            else if (r < 85) r = 4;
+            //else if (r < 100) r = 5;
+            matrix[y][x] = r;
         }
-            else if (matrix[y][x] == 2){
-                antixot.push(new Antigrass(x, y, 2));
-            }
-                else if (matrix[y][x] == 3){
-                    antiantixot.push(new Antiantigrass(x, y, 3));
-                }
+    }
+    return matrix;
+}
+
+
+//stexcum en zangvacic patahakan andam tvox function
+Random = function (arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
+
+//kanchum en genMatrix functiony ev talis en matrix popoxakanin
+matrix = genMatrix(w, h);
+
+//stex pptvum en matrix-i mejov u stexcum en objectnery
+for (var y = 0; y < matrix.length; y++) {
+    for (var x = 0; x < matrix[y].length; x++) {
+
+        if (matrix[y][x] == 4) {
+            grassArr.push(new Grass(x, y, 4));
+        }
+        else if (matrix[y][x] == 2) {
+            grasseaterArr.push(new GrassEater(x, y, 2));
+        }
+        else if (matrix[y][x] == 3) {
+            predatorArr.push(new Predator(x, y, 3));
+        }
+        else if (matrix[y][x] == 1) {
+            bombesArr.push(new Bombes(x, y, 1));
+        }
+   
     }
 }
 
-function drawserver(){
+//stexcum en function vor kkanchi objecteri methodnery ev kuxark matrixi masin datan script.js
+function drawserever() {
 
-    for (var i in grassArr){
+    for (var i in grassArr) {
         grassArr[i].mul();
     }
-
-    for (var i in AntigrassArr){
-        AntigrassArr[i].move();
-        AntigrassArr[i].mul();
-        AntigrassArr[i].eat();
-
+    for (var i in grasseaterArr) {
+        
+        grasseaterArr[i].mul();
+        grasseaterArr[i].eat();
+      
+    }
+    for (var i in predatorArr) {
+       
+        predatorArr[i].mul();
+        predatorArr[i].eat();
+       
     }
 
-    for (var i in AntiantigrassArr){
-        AntiantigrassArr[i].move();
-        AntiantigrassArr[i].mul();
-        AntiantigrassArr[i].eat();
-    }
 
-io.sockets.emit("matrix", matrix);
-
+    //matrixy uxarkum en clientin
+    io.sockets.emit("matrix", matrix);
 }
 
-function drawMatrix(matrix){
-    background('#33FFFF');
 
-    for(var y = 0; y < matrix[y].length; x++){
-            if (matrix[x][y]==0){
+//connectiona stexcum scriptic ekac infoi himan vra script.js i het mousePressed i jamanak
+io.on('connection', function (socket) {
+    socket.on("Sxmvec", function (arr) {
+        
+    });
+});
 
-            }
-    }
-}
+
+setInterval(drawserever, 2000);
+
+console.log(matrix);
+
+
+
+
+
