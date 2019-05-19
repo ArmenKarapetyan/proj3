@@ -1,5 +1,5 @@
 var LivingCreature = require("./LivingCreature.js");
-
+var Grass = require("./Grass.js");
 
 module.exports = class GrassEater extends LivingCreature{
 
@@ -12,7 +12,7 @@ module.exports = class GrassEater extends LivingCreature{
 
 	mul(){
 		if(this.energy == 6){
-			var emptyCord = this.getDirections(0);
+			var emptyCord = this.chooseCell(0);
 
 			var cord = random(emptyCord);
 			
@@ -35,9 +35,9 @@ module.exports = class GrassEater extends LivingCreature{
 		this.multiply++;
 		
 		if(this.multiply == 3){
-		var emptyCord = this.getDirections(1,0);
+		var emptyCord = this.chooseCell(1);
 
-			var cord = random(emptyCord);
+			var cord = Random(emptyCord);
 			
 			if(cord){
 				var x = cord[0];
@@ -47,9 +47,9 @@ module.exports = class GrassEater extends LivingCreature{
 				matrix[this.y][this.x] = 0;
 				this.multiply = 0;
 
-				for(var i in GrassArr){
-					if(x == GrassArr[i].x && y == GrassArr[i].y){
-						GrassArr.splice(i,1);
+				for(var i in Grass){
+					if(x == Grass[i].x && y == Grass[i].y){
+						Grass.splice(i,1);
 							this.energy++;
 							this.xp--;
 					}

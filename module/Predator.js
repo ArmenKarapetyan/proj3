@@ -1,5 +1,5 @@
 var LivingCreature = require("./LivingCreature.js");
-
+var GrassEater = require("./GrassEater.js");
 
 module.exports = class antiantiGrass extends LivingCreature {
 
@@ -12,17 +12,17 @@ module.exports = class antiantiGrass extends LivingCreature {
 
 	mul(){
 		if(this.energy == 5){
-			var emptyCord = this.getDirections(0);
+			var emptyCord = this.chooseCell(0);
 
-			var cord = random(emptyCord);
+			var cord = Random(emptyCord);
 			
 			if(cord){
 				var x = cord[0];
 				var y = cord[1];
 				this.energy == 0;
 
-				var norAntiAnti = new antiantiGrass(x,y,this.index);
-				antixot.push(norAntiAnti);
+				var PredatorArr = new Predator(x,y,this.index);
+				GrassEater.push(PredatorArr);
 
 				matrix[y][x] = 2;
 				
@@ -42,9 +42,9 @@ module.exports = class antiantiGrass extends LivingCreature {
 
 		this.multiply++;
 		if(this.multiply == 2){
-		var emptyCord = this.getDirections(2,0);
+		var emptyCord = this.chooseCell(2);
 
-			var cord = random(emptyCord);
+			var cord = Random(emptyCord);
 			
 			if(cord){
 				var x = cord[0];
@@ -54,9 +54,9 @@ module.exports = class antiantiGrass extends LivingCreature {
 				matrix[this.y][this.x] = 0;
 				this.multiply = 0;
 
-				for(var i in antixot){
-					if(x == antixot[i].x && y == antixot[i].y){
-						antixot.splice(i,1);
+				for(var i in GrassEater){
+					if(x == GrassEater[i].x && y == GrassEater[i].y){
+						GrassEater.splice(i,1);
 						this.energy++;
 							this.xp--;
 					}

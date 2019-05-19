@@ -8,6 +8,30 @@ var socket = io();
     background('blue');  
  }
  
+ function drawWrather(w){
+    var p = document.getElementById("season");
+    var weather = w;
+    console.log(weather);
+ 
+    if (weather == "Summer"){
+        p.innerText = "Summer";
+    }
+
+        else if (weather == "Winter"){
+            p.innerText = "Winter";
+        }
+            else if (weather == "Autumn"){
+                p.innerText = "Autumn";
+            }
+
+                else if (weather == "Spring"){
+                    p.innerText = "Spring";
+                }
+
+}
+
+
+
  //nuyn draw functiony uxaki serveric ekac matrixi hashvin 
  function drawMatrix(matrix) {
     background('grey'); 
@@ -25,12 +49,21 @@ var socket = io();
                 fill("yellow");
             }
             else if (matrix[y][x] == 3) {
-                fill("black");
-            }
-            else if(matrix[y][x] == 4){
                 fill("red");
             }
+            else if(matrix[y][x] == 4){
+                fill("black");
+            }
             rect(x * side, y * side, side, side);
+        }
+
+        else if (matrix[y][x] == 1){
+                if (weatherclient == "Summer"){
+                    fill("green");
+                }
+                else if (weatherclient != "Summer"){
+                    fill("#A79F15");
+                }
         }
     }
 }
@@ -45,6 +78,7 @@ socket.on("matrix", drawMatrix);
      arr = [x, y];
      console.log(arr);
      socket.emit("Sxmvec", arr)
+
       
  }
 
