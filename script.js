@@ -57,14 +57,7 @@ var socket = io();
             rect(x * side, y * side, side, side);
         }
 
-        else if (matrix[y][x] == 1){
-                if (weatherclient == "Summer"){
-                    fill("green");
-                }
-                else if (weatherclient != "Summer"){
-                    fill("#A79F15");
-                }
-        }
+      
     }
 }
 
@@ -78,7 +71,5 @@ socket.on("matrix", drawMatrix);
      arr = [x, y];
      console.log(arr);
      socket.emit("Sxmvec", arr)
-
-      
  }
 

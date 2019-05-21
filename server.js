@@ -109,7 +109,19 @@ function drawserever() {
 //connectiona stexcum scriptic ekac infoi himan vra script.js i het mousePressed i jamanak
 io.on('connection', function (socket) {
     socket.on("Sxmvec", function (arr) {
+        var x = arr[0];
+        var y = arr[1];
         
+
+        if (matrix[y][x] == 4){
+        for(var i in GrassEater){
+            if(x == GrassEater[i].x && y == GrassEater[i].y){
+                GrassEater.splice(i,1);
+                
+            }
+        }
+    }
+        matrix[y][x]=0;
     });
 });
 
