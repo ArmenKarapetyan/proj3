@@ -9,6 +9,23 @@ module.exports = class antiantiGrass extends LivingCreature {
 		this.xp = 8;
     }
 
+		move() {
+        
+			var fullCells = this.chooseCell(0);
+			var newCell = Random(fullCells);
+
+			if (newCell) {
+					var newX = newCell[0];
+					var newY = newCell[1];
+					// console.log(this.x,this.y); 
+					matrix[this.y][this.x] = 0;
+					matrix[newY][newX] = this.index;
+					//sxals stex er
+					this.x = newX;
+					this.y = newY;
+					this.energy--;
+			}
+	}
 
 	mul(){
 		if(this.energy == 5){
@@ -28,6 +45,7 @@ module.exports = class antiantiGrass extends LivingCreature {
 				
 			}
 			this.energy = 0;
+			Predatorinit++;
 		}
 	}	
 
@@ -59,6 +77,7 @@ module.exports = class antiantiGrass extends LivingCreature {
 						GrassEater.splice(i,1);
 						this.energy++;
 							this.xp--;
+							GrassEaterinit--;
 					}
 				}
 			

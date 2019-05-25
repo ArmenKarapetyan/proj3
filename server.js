@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var fs = require('fs');
 
 app.use(express.static("."));
 
@@ -25,6 +26,14 @@ grassArr = [];
 grasseaterArr = [];
 predatorArr = [];
 bombesArr = [];
+
+Weather = "Summer";
+Weatherinit = 1;
+Grassinit = 0;
+GrassEaterinit = 0;
+Predatorinit = 0;
+Bombesinit = 0;
+
 
 //stexcum en matrix generacnox function
 var w = 50;
@@ -63,15 +72,19 @@ for (var y = 0; y < matrix.length; y++) {
 
         if (matrix[y][x] == 1) {
             grassArr.push(new Grass(x, y, 1));
+            Grassinit++;
         }
         else if (matrix[y][x] == 2) {
             grasseaterArr.push(new GrassEater(x, y, 2));
+            GrassEaterinit++;
         }
         else if (matrix[y][x] == 3) {
             predatorArr.push(new Predator(x, y, 3));
+            Predatorinit++;
         }
         else if (matrix[y][x] == 4) {
             bombesArr.push(new Bombes(x, y, 4));
+            Bombesinit++;
         }
    
     }
@@ -84,20 +97,20 @@ function drawserever() {
         grassArr[i].mul();
     }
     for (var i in grasseaterArr) {
-        
+        grasseaterArr[i].move();
         grasseaterArr[i].mul();
         grasseaterArr[i].eat();
       
     }
     for (var i in predatorArr) {
-       
+        predatorArr[i].move();
         predatorArr[i].mul();
         predatorArr[i].eat();
        
     }
 
     for (var  i in bombesArr){
-        bombesArr[i].boom();
+        // bombesArr[i].boom();
     }    
 
     //matrixy uxarkum en clientin
@@ -105,28 +118,127 @@ function drawserever() {
    
 }
 
+function draw_wheater() {
+
+    Weatherinit++;
+    if (Weatherinit == 5) {
+        Weatherinit = 1;
+    }
+    if (Weatherinit == 4) {
+        Weather = "Spring";
+    }
+    if (Weatherinit == 3) {
+        Weather = "Winter";
+    }
+    if (Weatherinit == 2) {
+        Weather = "Autumn";
+    }
+    if (Weatherinit == 1) {
+        Weather = "Summer";
+    }
+   
+    io.sockets.emit("exanak", Weather);
+}
+
+
 
 //connectiona stexcum scriptic ekac infoi himan vra script.js i het mousePressed i jamanak
 io.on('connection', function (socket) {
     socket.on("Sxmvec", function (arr) {
         var x = arr[0];
         var y = arr[1];
-        
+    
 
         if (matrix[y][x] == 4){
-        for(var i in GrassEater){
-            if(x == GrassEater[i].x && y == GrassEater[i].y){
-                GrassEater.splice(i,1);
+        for(var i in bombesArr){
+            if(x == bombesArr[i].x && y == bombesArr[i].y){
+                bombesArr.splice(i,1);
                 
             }
+         }
+        matrix[y][x]=1;
         }
+        
+            if(matrix[y][x] == 4 && matrix[y-1][x-1] == 2){
+        for(var i in grasseaterArr){
+            if (x-1 == grasseaterArr[i].x && y-1 == grasseaterArr[i].y){
+                grasseaterArr.splice(i,1);
+                
+            }
+            
+        }
+        matrix[y-1][x-1]=1;
     }
-        matrix[y][x]=0;
-    });
+        for(var i in grasseaterArr){
+            if (x == grasseaterArr[i].x && y-1 == grasseaterArr[i].y-1){
+                grasseaterArr.splice(i,1);
+                matrix[y-1][x]=1;
+            }
+        
+
+        }
+        for(var i in grasseaterArr){
+            if (x+1 == grasseaterArr[i].x+1 && y-1 == grasseaterArr[i].y-1){
+                grasseaterArr.splice(i,1);
+                matrix[y-1][x+1]=1;
+            }
+           
+        }
+        for(var i in grasseaterArr){
+            if (x-1 == grasseaterArr[i].x-1 && y == grasseaterArr[i].y){
+                grasseaterArr.splice(i,1);
+                matrix[y][x-1]=1;
+            }
+            
+        }
+        for(var i in grasseaterArr){
+            if (x+1 == grasseaterArr[i].x+1 && y == grasseaterArr[i].y){
+                grasseaterArr.splice(i,1);
+                matrix[y][x+1]=1;
+            }
+            
+        }
+        for(var i in grasseaterArr){
+            if (x-1 == grasseaterArr[i].x-1 && y+1 == grasseaterArr[i].y+1){
+                grasseaterArr.splice(i,1);
+                matrix[y+1][x-1]=1;
+            }
+            
+        }
+        for(var i in grasseaterArr){
+            if (x == grasseaterArr[i].x && y+1 == grasseaterArr[i].y+1){
+                grasseaterArr.splice(i,1);
+                matrix[y+1][x]=1;
+            }
+          
+        }
+        for(var i in grasseaterArr){
+            if (x+1 == grasseaterArr[i].x+1 && y+1 == grasseaterArr[i].y+1){
+                grasseaterArr.splice(i,1);
+                matrix[y+1][x+1]=1;
+            }
+            
+        }
+
+    
+
+
+        
+            });
 });
 
+var obj = { "info": [] };
 
-setInterval(drawserever, 1000);
+function main() {
+    var file = "Statistics.json";
+    obj.info.push({ "Xoter qanaky": Grassinit, "Xotakerneri qanaky": GrassEaterinit, "Gishatichneri qanaky": Predatorinit});
+    fs.writeFileSync(file, JSON.stringify(obj,null,3));
+}
+
+
+setInterval(drawserever, 1500);
+setInterval(draw_wheater, 6000);
+setInterval(main, 3000)
 
 console.log(matrix);
 
